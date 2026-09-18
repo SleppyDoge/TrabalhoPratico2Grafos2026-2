@@ -68,13 +68,59 @@ A saída deverá conter **dois inteiros** separados por um espaço:
 
 ## Modelagem do Grafo
 
-### Vértices
+### Vértices e Arestas
 
-### Arestas
+No problema, as junções representam os vértices do grafo. Cada vértice possui um custo associado à construção de um checkpoint policial.
+
+As arestas representam vias de mão única entre as junções. Portanto, são arestas direcionadas que conectam dois vértices.
 
 ### Classificação do Grafo
 
+- Como as vias possuem sentido único, o grafo é classificado como um **dígrafo** (grafo direcionado).
+- O grafo é **não ponderado**, pois os custos estão associados aos vértices, e não às arestas.
+- O grafo **não é necessariamente conexo**, pois podem existir grupos de vértices sem caminhos entre si.
+- O grafo permite arestas em sentidos opostos entre dois vértices — por exemplo, u → v e v → u. Porém, não pode haver mais de uma aresta com a mesma direção entre o mesmo par de vértices.
+
+## Resultado de Aprendizagem aferido
+
 ## DFS/BFS
 
+Um ponto que consideraremos crucial para a solução desse problema é a identificação de ciclos dos vértices, pois isso indica que quaisquer junções nesse ciclo podem ser utilizadas como checkpoints. Entre ambos os métodos para pesquisa de grafos, consideramos que a capacidade do DFS de percorrer o máximo possível - possívelmente retornando para o vértice de partida - é a melhor abordagem para a solução do problema.
+
 ## Instância Pequena
+
+```txt
+3
+1 2 3
+3
+1 2
+2 3
+3 2
+```
+
+**Representação da Instância**
+````mermaid
+flowchart LR
+    A((1))
+    B((2))
+    C((3))
+
+    A ---> B
+    B ---> C
+    C ---> B
+
+    classDef normal fill:#2d68ad,stroke:#2d68ad,stroke-width:1px, 
+    classDef police fill:#dd0c19,stroke:#dd0c19, stroke-width: 1px
+
+    class A,B police
+    class C normal
+````
+
+Os números presentes nos vértices indicam o custo associado a criação de um checkpoint na junção. Como não existe nenhum vértice que pode percorrer o vértice 1 de retornar, obrigatoriamente deve existir um checkpoint nele.
+
+As junções 2 e 3 formam um ciclo e, sendo assim, um checkpoint em qualquer um deles consegue simultaneamente proteger o vértice e o membro do ciclo. Como desejamos custo mínimo, escolhe-se estabelecer um checkpoint no vértice 2.
+
+Sendo assim, o custo mínimo é *1 + 2 = 3* e, como não é possível gerar nenhuma outra configuração que possua o mesmo custo, então há apenas 1 configuração possível. Logo:
+
+> 3 1
 
