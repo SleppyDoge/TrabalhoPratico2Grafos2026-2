@@ -83,6 +83,8 @@ As arestas representam vias de mão única entre as junções. Portanto, são ar
 
 ## Resultado de Aprendizagem aferido
 
+Esse problema demonstra desde o começo um grande uso dos principios aprendidos no Trabalho 1, em especial com a busca de profundidade e no uso em especial para percorrer digrafos.
+
 ## DFS/BFS
 
 Um ponto que consideraremos crucial para a solução desse problema é a identificação de ciclos dos vértices, pois isso indica que quaisquer junções nesse ciclo podem ser utilizadas como checkpoints. Entre ambos os métodos para pesquisa de grafos, consideramos que a capacidade do DFS de percorrer o máximo possível - possívelmente retornando para o vértice de partida - é a melhor abordagem para a solução do problema.
