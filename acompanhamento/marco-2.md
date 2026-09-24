@@ -302,3 +302,237 @@ flowchart LR
     class C normal 
 
 ````
+## DFS e Identificação das Componentes Conexas
+
+> **Responsável: Vitor Dantas**
+
+### Estruturas de Dados Utilizadas
+
+<!-- Preencher com a explicação das estruturas usadas pelo algoritmo de componentes conexas, como:
+- vetor de visitados;
+- vetor de identificadores das componentes;
+- contador de componentes;
+- lista de adjacência.
+-->
+
+### Rastreamento da DFS Recursiva
+
+<!-- Preencher com o rastreamento manual do algoritmo de componentes conexas,
+mostrando a ordem de visita dos vértices e como cada vértice recebe o identificador
+da componente correspondente.
+-->
+
+### Identificação das Componentes Conexas
+
+<!-- Preencher com a explicação da lógica utilizada para identificar as componentes conexas. -->
+
+### Complexidade de Tempo e Espaço
+
+<!-- Preencher com a justificativa da complexidade de tempo e espaço do algoritmo. -->
+
+### Custo das Consultas de Conectividade
+
+<!-- Preencher com a justificativa do custo para verificar se dois vértices pertencem
+à mesma componente conexa. -->
+
+
+## Análise Matemática do Grafo
+
+> **Responsável: Renato Romano**
+
+Para esta análise, considera-se o grafo adaptado para **simples e não direcionado**, conforme exigido no Marco 2.
+
+A partir da entrada escolhida, temos as seguintes arestas:
+
+```text
+1 - 4
+1 - 3
+2 - 4
+3 - 4
+4 - 5
+5 - 1
+```
+
+O grafo é conexo, pois existe um caminho entre qualquer par de vértices. Dessa forma, há apenas uma componente conexa:
+
+```text
+C1 = {1, 2, 3, 4, 5}
+```
+
+### Distâncias entre os Vértices
+
+A distância entre dois vértices corresponde ao comprimento do caminho mais curto entre eles.
+
+As menores distâncias entre os vértices são:
+
+| Vértice de origem | Distância até 1 | Distância até 2 | Distância até 3 | Distância até 4 | Distância até 5 |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| 1 | 0 | 2 | 1 | 1 | 1 |
+| 2 | 2 | 0 | 2 | 1 | 2 |
+| 3 | 1 | 2 | 0 | 1 | 2 |
+| 4 | 1 | 1 | 1 | 0 | 1 |
+| 5 | 1 | 2 | 2 | 1 | 0 |
+
+### Excentricidades
+
+A excentricidade de um vértice corresponde à maior, entre as menores distâncias desse vértice até os demais vértices da componente.
+
+#### Vértice 1
+
+As distâncias de 1 até os demais vértices são:
+
+```text
+d(1,2) = 2
+d(1,3) = 1
+d(1,4) = 1
+d(1,5) = 1
+```
+
+Assim:
+
+```text
+exc(1) = max{2,1,1,1} = 2
+```
+
+#### Vértice 2
+
+As distâncias de 2 até os demais vértices são:
+
+```text
+d(2,1) = 2
+d(2,3) = 2
+d(2,4) = 1
+d(2,5) = 2
+```
+
+Assim:
+
+```text
+exc(2) = max{2,2,1,2} = 2
+```
+
+#### Vértice 3
+
+As distâncias de 3 até os demais vértices são:
+
+```text
+d(3,1) = 1
+d(3,2) = 2
+d(3,4) = 1
+d(3,5) = 2
+```
+
+Assim:
+
+```text
+exc(3) = max{1,2,1,2} = 2
+```
+
+#### Vértice 4
+
+As distâncias de 4 até os demais vértices são:
+
+```text
+d(4,1) = 1
+d(4,2) = 1
+d(4,3) = 1
+d(4,5) = 1
+```
+
+Assim:
+
+```text
+exc(4) = max{1,1,1,1} = 1
+```
+
+#### Vértice 5
+
+As distâncias de 5 até os demais vértices são:
+
+```text
+d(5,1) = 1
+d(5,2) = 2
+d(5,3) = 2
+d(5,4) = 1
+```
+
+Assim:
+
+```text
+exc(5) = max{1,2,2,1} = 2
+```
+
+Portanto, as excentricidades dos vértices são:
+
+```text
+exc(1) = 2
+exc(2) = 2
+exc(3) = 2
+exc(4) = 1
+exc(5) = 2
+```
+
+### Raio da Componente
+
+O raio corresponde à menor excentricidade entre os vértices da componente.
+
+```text
+raio(C1) = min{2,2,2,1,2}
+raio(C1) = 1
+```
+
+### Diâmetro da Componente
+
+O diâmetro corresponde à maior excentricidade entre os vértices da componente.
+
+```text
+diâmetro(C1) = max{2,2,2,1,2}
+diâmetro(C1) = 2
+```
+
+### Vértices Centrais
+
+Um vértice é considerado central quando sua excentricidade é igual ao raio da componente.
+
+Como:
+
+```text
+raio(C1) = 1
+```
+
+e apenas o vértice 4 possui excentricidade igual a 1:
+
+```text
+exc(4) = 1
+```
+
+o vértice central da componente é:
+
+```text
+4
+```
+
+### Centro da Componente
+
+O centro de uma componente é o conjunto formado por todos os seus vértices centrais.
+
+Logo:
+
+```text
+centro(C1) = {4}
+```
+
+### Resumo da Análise
+
+| Propriedade | Resultado |
+|---|---|
+| Componente conexa | `{1,2,3,4,5}` |
+| `exc(1)` | 2 |
+| `exc(2)` | 2 |
+| `exc(3)` | 2 |
+| `exc(4)` | 1 |
+| `exc(5)` | 2 |
+| Raio | 1 |
+| Diâmetro | 2 |
+| Vértice central | 4 |
+| Centro | `{4}` |
