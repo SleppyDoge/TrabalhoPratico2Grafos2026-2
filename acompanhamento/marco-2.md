@@ -66,7 +66,7 @@ flowchart LR
   E(("5(0)"))
 ```
 
-#### Passo 4: Ligação Vértice _1_ e _4_
+#### Passo 3: Ligação Vértice _1_ e _4_
 
 Para a ligação entre vértices 1 e 4, assumindo um grafo não-direcionado, temos:
 
@@ -93,7 +93,7 @@ flowchart LR
 |4|1|
 |5||
 
-#### Passo 5: Ligação Vértice _1_ e _3_
+#### Passo 4: Ligação Vértice _1_ e _3_
 
 Para a ligação entre vértices 1 e 3, assumindo um grafo não-direcionado, temos:
 
@@ -121,7 +121,7 @@ flowchart LR
 |4|1|
 |5||
 
-#### Passo 6: Ligação Vértice _2_ e _4_
+#### Passo 5: Ligação Vértice _2_ e _4_
 
 Para a ligação entre vértices 2 e 4, assumindo um grafo não-direcionado, temos:
 
@@ -150,7 +150,7 @@ flowchart LR
 |4|1, 2|
 |5||
 
-#### Passo 7: Ligação Vértice _3_ e _4_
+#### Passo 6: Ligação Vértice _3_ e _4_
 
 Para a ligação entre vértices 3 e 4, assumindo um grafo não-direcionado, temos:
 
@@ -180,7 +180,7 @@ flowchart LR
 |4|1, 2, 3|
 |5||
 
-#### Passo 8: Ligação Vértice _4_ e _5_
+#### Passo 7: Ligação Vértice _4_ e _5_
 
 Para a ligação entre vértices 4 e 5, assumindo um grafo não-direcionado, temos:
 
@@ -211,7 +211,7 @@ flowchart LR
 |4|1, 2, 3, 5|
 |5|4|
 
-#### Passo 9: Ligação Vértice _5_ e _1_
+#### Passo 8: Ligação Vértice _5_ e _1_
 
 Para a ligação entre vértices 5 e 1, assumindo um grafo não-direcionado, temos:
 
@@ -302,6 +302,7 @@ flowchart LR
     class C normal 
 
 ````
+
 ## DFS e Identificação das Componentes Conexas
 
 > **Responsável: Vitor Dantas**
@@ -334,7 +335,6 @@ da componente correspondente.
 
 <!-- Preencher com a justificativa do custo para verificar se dois vértices pertencem
 à mesma componente conexa. -->
-
 
 ## Análise Matemática do Grafo
 
