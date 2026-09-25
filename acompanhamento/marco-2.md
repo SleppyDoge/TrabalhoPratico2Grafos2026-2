@@ -275,70 +275,128 @@ flowchart LR
 |4|1, 2, 3, 5|
 |5|4, 1|
 
-# Referencia para Vitor e Renato
-
-Essa parte é só para manter a estrutura do grafo caso vocês precisem para ilustar a parte de vocês. Se não houver necessidade favor remover antes do envio.
-
-````mermaid
-flowchart LR
-    A((2))
-    B((8))
-    C((0))
-    D((6))
-    E((0))   
-
-
-    A --- D
-    A --- C
-    B --- D
-    C --- D
-    D --- E
-    A --- E
-
-    classDef normal fill:#2d68ad,stroke:#2d68ad,stroke-width:1px, 
-    classDef police fill:#dd0c19,stroke:#dd0c19, stroke-width: 1px
-
-    class A,B police
-    class C normal 
-
-````
 
 ## DFS e Identificação das Componentes Conexas
 
-> **Responsável: Vitor Dantas**
 
 ### Estruturas de Dados Utilizadas
 
-<!-- Preencher com a explicação das estruturas usadas pelo algoritmo de componentes conexas, como:
-- vetor de visitados;
-- vetor de identificadores das componentes;
-- contador de componentes;
-- lista de adjacência.
--->
+Para o algoritmo de identificação de componentes conexas, além da lista de adjacência já construída, são usadas:
+ 
+- **Lista de adjacência** `adj[]`: já construída nos Passos 1-8 (grafo não-direcionado).
+- **Vetor `visitado[]`** (tamanho `n`): marca se cada vértice já foi visitado pela DFS, evitando revisitas e loops infinitos.
+- **Vetor `componente[]`** (tamanho `n`): guarda o identificador da componente à qual cada vértice pertence. É o resultado principal do algoritmo.
+- **Pilha de recursão (implícita)**: a própria DFS recursiva usa a pilha de chamadas da linguagem para "voltar" a um vértice anterior quando todos os vizinhos do vértice atual já foram explorados.
+- **Contador `numComponentes`**: inicia em 0 e é incrementado toda vez que a DFS é iniciada a partir de um vértice ainda não visitado, no laço externo do algoritmo.
 
 ### Rastreamento da DFS Recursiva
 
-<!-- Preencher com o rastreamento manual do algoritmo de componentes conexas,
-mostrando a ordem de visita dos vértices e como cada vértice recebe o identificador
-da componente correspondente.
--->
-
+Laço externo: percorre os vértices de 1 a 5; ao encontrar um vértice não visitado, inicia uma nova DFS e um novo id de componente.
+ 
+Usando a lista de adjacência final (Passo 8):
+ 
+| Vértice | Adjacentes |
+|:-:|:--|
+|1|4, 3, 5|
+|2|4|
+|3|1, 4|
+|4|1, 2, 3, 5|
+|5|4, 1|
+ 
+**Início:** vértice 1 não visitado → `componente[1] = 1`, `numComponentes = 1`.
+ 
+| Chamada | Ação | `visitado` após ação |
+|:--|:--|:--|
+| DFS(1) | marca 1 visitado; vizinhos [4, 3, 5] | {1} |
+| → DFS(4) | 1º vizinho de 1; marca 4 visitado; vizinhos [1, 2, 3, 5] | {1, 4} |
+| → → DFS(2) | 1 já visitado ignorado; vai a 2; marca 2 visitado; vizinhos [4]; 4 já visitado → **termina 2** | {1, 4, 2} |
+| → volta a 4 | próximo vizinho: 3 | — |
+| → → DFS(3) | marca 3 visitado; vizinhos [1, 4], ambos já visitados → **termina 3** | {1, 4, 2, 3} |
+| → volta a 4 | próximo vizinho: 5 | — |
+| → → DFS(5) | marca 5 visitado; vizinhos [4, 1], ambos já visitados → **termina 5** | {1, 4, 2, 3, 5} |
+| → sem mais vizinhos → **termina 4** | | |
+| volta a 1 | próximos vizinhos 3 e 5 já visitados → **termina 1** | |
+ 
+Todos os 5 vértices foram alcançados por essa única chamada de DFS(1), então todos recebem `componente = 1`. O laço externo verifica os vértices restantes (2, 3, 4, 5) e encontra todos já visitados — nenhuma nova DFS é disparada.
+ 
+```mermaid
+flowchart LR 
+  A(("1(2)"))
+  B(("2(8)"))
+  C(("3(0)"))
+  D(("4(6)"))
+  E(("5(0)"))
+ 
+  A --- D
+  A --- C
+  B --- D
+  C --- D
+  D --- E
+  E --- A
+ 
+  classDef comp1 fill:#2d68ad,stroke:#2d68ad,stroke-width:1px,color:#fff
+  class A,B,C,D,E comp1
+```
+ 
 ### Identificação das Componentes Conexas
-
-<!-- Preencher com a explicação da lógica utilizada para identificar as componentes conexas. -->
+ 
+A lógica é: um laço externo percorre todos os vértices de 1 a `n`; sempre que encontra um vértice ainda não marcado em `visitado[]`, isso significa que ele pertence a uma componente ainda não descoberta. O algoritmo então incrementa `numComponentes` e dispara uma DFS a partir desse vértice, marcando **todos os vértices alcançáveis** por arestas (diretamente ou por caminhos) com esse mesmo id em `componente[]`. Como o grafo é não-direcionado, "alcançável" é uma relação simétrica: se `u` alcança `v`, `v` também alcança `u` — por isso cada DFS captura a componente inteira de uma vez, sem sobreposição com as demais.
+ 
+No exemplo, como o vértice 4 tem grau alto (conectado a 1, 2, 3 e 5), a primeira DFS (a partir do vértice 1) já alcança todos os outros vértices. Resultado:
+ 
+| Componente | Vértices |
+|:-:|:--|
+| C1 | {1, 2, 3, 4, 5} |
+ 
+`numComponentes = 1` — o grafo é totalmente conexo.
 
 ### Complexidade de Tempo e Espaço
-
-<!-- Preencher com a justificativa da complexidade de tempo e espaço do algoritmo. -->
-
+ 
+**Tempo — O(n + m):**
+ 
+- O laço externo percorre os `n` vértices, e cada iteração faz apenas uma checagem O(1) (`if (!visitado[v])`), custando **O(n)** ao todo, sem contar as DFS disparadas.
+- Dentro da DFS, cada vértice é marcado como visitado **exatamente uma vez** (a checagem `visitado[]` no início da função impede reprocessamento), custando **O(n)** no total para todos os vértices.
+- Cada vértice, ao ser visitado, percorre sua lista de adjacência inteira. Como o grafo é não-direcionado, cada aresta aparece duas vezes na estrutura (uma em `adj[u]`, outra em `adj[v]`), totalizando `2m` entradas examinadas ao longo de toda a execução — **O(m)**.
+Somando: **O(n) + O(m) = O(n + m)**. Esse é o melhor tempo possível, já que apenas ler a entrada (todos os vértices e arestas) já custa O(n + m).
+ 
+**Espaço — O(n + m):**
+ 
+| Estrutura | Tamanho | Motivo |
+|:--|:-:|:--|
+| Lista de adjacência `adj[]` | O(n + m) | `n` listas contendo juntas `2m` referências a vizinhos |
+| `visitado[]` | O(n) | um booleano por vértice |
+| `componente[]` | O(n) | um inteiro por vértice |
+| Pilha de recursão da DFS | O(n) no pior caso | profundidade limitada pelo maior caminho simples percorrido sem retroceder; no pior caso (grafo em forma de corrente) chega a O(n) |
+ 
+Somando tudo, o espaço total é **O(n + m)**, dominado pela lista de adjacência.
+ 
 ### Custo das Consultas de Conectividade
-
-<!-- Preencher com a justificativa do custo para verificar se dois vértices pertencem
-à mesma componente conexa. -->
+ 
+O custo deve ser analisado em duas fases:
+ 
+**Fase 1 — pré-processamento (uma única vez):** executar o algoritmo de componentes conexas por completo, custando **O(n + m)**, preenchendo o vetor `componente[]`.
+ 
+**Fase 2 — cada consulta "u e v estão conectados?" após o pré-processamento:**
+ 
+```
+mesmaComponente(u, v) = (componente[u] == componente[v])
+```
+ 
+Uma simples comparação de dois inteiros já calculados: **O(1)** por consulta, independentemente do tamanho do grafo.
+ 
+**Comparação com a alternativa ingênua:** sem pré-processamento, responder "u alcança v?" exigiria uma nova BFS/DFS a partir de `u` a cada pergunta, custando O(n + m) **por consulta**. Para `q` perguntas, isso daria O(q · (n + m)) no total.
+ 
+Com o pré-processamento, o custo total para `q` perguntas é:
+ 
+```
+O(n + m)   ← feito uma vez, no início
+   +
+O(q)       ← O(1) por pergunta, vezes q perguntas
+```
+ 
+ou seja, **O(n + m + q)** no total, em vez de **O(q · (n + m))** — o que justifica manter `componente[]` como estrutura auxiliar.
 
 ## Análise Matemática do Grafo
-
-> **Responsável: Renato Romano**
 
 Para esta análise, considera-se o grafo adaptado para **simples e não direcionado**, conforme exigido no Marco 2.
 
