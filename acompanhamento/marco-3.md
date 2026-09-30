@@ -2,11 +2,11 @@
 
 ## Propriedade e critério de reconhecimento
 
-- **Propriedade**: ...............
+- **Propriedade**: Componentes fortemente conexas (CFCs)
 
-- **Critério**: ..............
+- **Critério**: Um novo componente é identificado ao encontrar um vértice ainda não visitado; a DFS percorre todos os vértices alcançáveis e os associa ao mesmo componente.
 
-....(Comentário resumido)......
+Em cada componente identificado, é determinado o menor custo. Após isso, soma-se esses valores e multiplica pela quantidade de vértices que tem esse mínimo de gasto.
 
 ## Referências de algs4 e adaptações previstas
 
