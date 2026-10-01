@@ -10,8 +10,6 @@ Em cada componente identificado, é determinado o menor custo. Após isso, soma-
 
 ## Referências de algs4 e adaptações previstas
 
-## Referências de algs4 e adaptações previstas
-
 Para a estratégia do problema, serão utilizadas como referência algumas implementações disponíveis no `algs4-py`.
 
 ### `digraph.py`
