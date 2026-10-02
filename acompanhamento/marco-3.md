@@ -52,19 +52,126 @@ Assim, o algoritmo de Kosaraju será responsável pela parte estrutural da solu�
 
 ## Rastreamento manual em uma instância pequena
 
-.
-.
-.
-.
-.
-.
+### Instância
+
+Para o rastreamento manual, usaremos inicialmente o grafo construido pela instância:
+
+```txt
+5
+2 8 0 6 0
+6
+1 4
+1 3
+2 4
+3 4
+4 5
+5 1
+```
+
+que, pela construção do marco anterior, mas com as direções das arestas, resultando em:
+
+**Grafo**:
+
+```mermaid
+flowchart LR 
+  A(("1(2)"))
+  B(("2(8)"))
+  C(("3(0)"))
+  D(("4(6)"))
+  E(("5(0)"))
+
+  A ---> D
+  A ---> C
+  B ---> D
+  C ---> D
+  D ---> E
+  E ---> A
+```
+
+**Lista de Adjacência**:
+
+|Vértice|Vértices Adjacêntes|
+|:-:|:--|
+|1|4, 3|
+|2|4|
+|3|4|
+|4|5|
+|5|1|
+
+### Execução do Primeiro DFS
+
+| Chamada | Ação | Marcados | Finalizados |
+| --------------- | --------------- | --------------- | --------------- |
+| DFS(1) | Marca 1 como visitado, avança para o 4 | {1} | {} |
+| -> DFS(4) | Marca 4 como visitado, avança para 5 | {1, 4} | {} |
+| -> -> DFS(5) | Marca 5 como visitado, não tem vizinhos não visitados, termina | {1, 4, 5} | {5} |
+| -> Volta para 4 | não tem mais vizinhos não visitados, termina | {1, 4, 5} | {5, 4} |
+| Volta para 1 | avança para o vizinho 3 | {1, 4, 5} | {5, 4} |
+| -> DFS(3) | Marca 3 como visitado, não tem vizinhos não visitados, termina  | {1, 4, 5, 3} | {5, 4, 3} |
+| Volta para 1 | Não tem vizinhos não visitados, termina | {1, 4, 5, 3} | {5, 4, 3, 1} |
+| DFS(2) | Marca 2 como visitado, não tem vizinhos não visitados, termina | {1, 4, 5, 3, 2} | {5, 4, 3, 1, 2} |
+
+### Resultados do Primeiro DFS
+
+Para executar a ordem do DFS seguinte, será utilizada o inverso da ordem de finalizados, logo:
+
+```
+{2, 1, 3, 4, 5}
+```
+
+### Invertendo a direção das arestas
+
+**Grafo**:
+
+```mermaid
+flowchart LR 
+  A(("1(2)"))
+  B(("2(8)"))
+  C(("3(0)"))
+  D(("4(6)"))
+  E(("5(0)"))
+
+  D ---> A
+  C ---> A
+  D ---> B
+  D ---> C
+  E ---> D
+  A ---> E
+```
+
+**Lista de Adjacência**:
+
+|Vértice|Vértices Adjacêntes|
+|:-:|:--|
+|1|5|
+|2||
+|3|1|
+|4|1, 2, 3|
+|5|4|
+
+### Segundo DFS
+
+| Chamada | Ação | Visitados | CFC |
+| --------------- | --------------- | --------------- | --------------- |
+| POP -> 2 | Aplicar DFS no vértice 2 | {} | {} |
+| DFS(2) | Marca 2 como visitado, como não possui mais vizinhos não visitados, termina adicionando percorridos ao  CFC | {2} | {{2}} |
+| POP -> 1 | Aplicar DFS no vértice 1 | {2} | {{2}} |
+| DFS(1) | Marca 1 como visitado, avança para o 5 | {2, 1} | {{2}} |
+| -> DFS(5) | Marca 5 como visitado, avança para o 4  | {2, 1, 5} | {{2}} |
+| -> -> DFS(4) | Marca 4 como visitado, 1 e 2 já foram visitados, avança para o 3 | {2, 1, 5, 4} | {{2}} |
+| -> -> -> DFS(3) | Marca 3 como visitado, todos os vizinhos já estão visitados, voltando | {2, 1, 5, 4, 3 } | {{2}} |
+| 4 | Todos os vizinhos já estão visitados, voltando para 5 | {2, 1, 5, 4, 3} | {{2}} |
+| 5 | Todos os visinhos já estão visitados, voltando para 1 | {2, 1, 5, 4, 3} | {{2}} |
+| 1 | Todos os visinhos já estão visitados, terminando e formando CFC | {2, 1, 5, 4, 3} | {{2}, {1, 5, 4, 3}} |
+
+Com base nos valores de CFC encontrados, pode ser percorrida cada componente encontrado para se determinar o custo mínimo e a quantidade de possibilidades que existem.
 
 ## Estimativa de complexidade
 
 Sejam `V` o número de vértices e `E` o número de arestas.
 
-- **Tempo: `O(??)`.** ........
+- **Tempo: `O(V + E)`.**
 
-- **Memória total: `O(??)`.** ........
+- **Memória total: `O(V + E)`.**
 
 Esta é uma análise da estratégia. A adaptação efetiva das referências e a validação por execução serão registradas no marco 4.
