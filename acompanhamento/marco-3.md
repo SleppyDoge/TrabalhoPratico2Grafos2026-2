@@ -54,7 +54,7 @@ Assim, o algoritmo de Kosaraju será responsável pela parte estrutural da solu�
 
 ### Instância
 
-Para o rastreamento manual, usaremos inicialmente o grafo construido pela instância:
+Para o rastreamento manual, usaremos inicialmente o grafo construído pela instância:
 
 ```txt
 5
@@ -68,7 +68,7 @@ Para o rastreamento manual, usaremos inicialmente o grafo construido pela instâ
 5 1
 ```
 
-que, pela construção do marco anterior, mas com as direções das arestas, resultando em:
+que, pela construção do marco anterior, mas com as direções das arestas, resulta em:
 
 **Grafo**:
 
@@ -88,40 +88,21 @@ flowchart LR
   E ---> A
 ```
 
-**Lista de Adjacência**:
+**Lista de Adjacência:**
 
-|Vértice|Vértices Adjacêntes|
-|:-:|:--|
-|1|4, 3|
-|2|4|
-|3|4|
-|4|5|
-|5|1|
+| Vértice | Vértices Adjacêntes |
+| :-: | :-- |
+| 1 | 4, 3 |
+| 2 | 4 |
+| 3 | 4 |
+| 4 | 5 |
+| 5 | 1 |
 
-### Execução do Primeiro DFS
-
-| Chamada | Ação | Marcados | Finalizados |
-| --------------- | --------------- | --------------- | --------------- |
-| DFS(1) | Marca 1 como visitado, avança para o 4 | {1} | {} |
-| -> DFS(4) | Marca 4 como visitado, avança para 5 | {1, 4} | {} |
-| -> -> DFS(5) | Marca 5 como visitado, não tem vizinhos não visitados, termina | {1, 4, 5} | {5} |
-| -> Volta para 4 | não tem mais vizinhos não visitados, termina | {1, 4, 5} | {5, 4} |
-| Volta para 1 | avança para o vizinho 3 | {1, 4, 5} | {5, 4} |
-| -> DFS(3) | Marca 3 como visitado, não tem vizinhos não visitados, termina  | {1, 4, 5, 3} | {5, 4, 3} |
-| Volta para 1 | Não tem vizinhos não visitados, termina | {1, 4, 5, 3} | {5, 4, 3, 1} |
-| DFS(2) | Marca 2 como visitado, não tem vizinhos não visitados, termina | {1, 4, 5, 3, 2} | {5, 4, 3, 1, 2} |
-
-### Resultados do Primeiro DFS
-
-Para executar a ordem do DFS seguinte, será utilizada o inverso da ordem de finalizados, logo:
-
-```
-{2, 1, 3, 4, 5}
-```
+Seguindo a implementação de referência ``kosaraju_scc.py`` do ``algs4-py``, o primeiro DFS é executado sobre o grafo invertido ($G^R$), e não sobre o grafo original. Portanto, antes de iniciar o rastreamento, invertemos as arestas.
 
 ### Invertendo a direção das arestas
 
-**Grafo**:
+**Grafo invertido:**
 
 ```mermaid
 flowchart LR 
@@ -139,39 +120,81 @@ flowchart LR
   A ---> E
 ```
 
-**Lista de Adjacência**:
+**Lista de Adjacência ($G^R$):**
 
-|Vértice|Vértices Adjacêntes|
-|:-:|:--|
-|1|5|
-|2||
-|3|1|
-|4|1, 2, 3|
-|5|4|
+|Vértice | Vértices Adjacêntes |
+| :-: | :-- |
+|1 | 5 |
+|2 | |
+|3 | 1 |
+|4 | 1, 2, 3 |
+|5 | 4 |
 
-### Segundo DFS
+### Execução do Primeiro DFS (sobre G^R)
+
+| Chamada | Ação | Marcados | Finalizados |
+| --- | --- | --- | --- |
+| DFS(1) | Marca 1 como visitado, avança para o 5 | {1} | {} |
+| -> DFS(5) | Marca 5 como visitado, avança para o 4 | {1, 5} | {} |
+| -> -> DFS(4) | Marca 4 como visitado; 1 já visitado, avança para o 2 | {1, 5, 4} | {} |
+| -> -> -> DFS(2) | Marca 2 como visitado, não tem vizinhos, termina | {1, 5, 4, 2} | {2} |
+| Volta para 4 | avança para o vizinho 3 | {1, 5, 4, 2} | {2} |
+| -> -> -> DFS(3) | Marca 3 como visitado; 1 já visitado, não tem mais vizinhos, termina | {1, 5, 4, 2, 3} | {2, 3} |
+| Volta para 4 | não tem mais vizinhos não visitados, termina | {1, 5, 4, 2, 3} | {2, 3, 4} |
+| Volta para 5 | não tem mais vizinhos não visitados, termina | {1, 5, 4, 2, 3} | {2, 3, 4, 5} |
+| Volta para 1 | não tem mais vizinhos não visitados, termina | {1, 5, 4, 2, 3} | {2, 3, 4, 5, 1} |
+
+Como todos os vértices já estão marcados ao final de DFS(1), o laço externo não precisa iniciar novas chamadas para os vértices 2, 3, 4 e 5.
+
+### Resultados do Primeiro DFS
+
+A ordem de processamento do segundo DFS é dada pela pós-ordem reversa (reverse_post()) obtida acima. Invertendo a ordem de finalizados {2, 3, 4, 5, 1}, obtemos:
+
+``{1, 5, 4, 3, 2}``
+
+### Segundo DFS (sobre o grafo original G)
+
+Com a ordem definida, o segundo DFS é executado sobre o grafo original (não invertido), seguindo exatamente o comportamento de kosaraju_scc.py.
 
 | Chamada | Ação | Visitados | CFC |
-| --------------- | --------------- | --------------- | --------------- |
-| POP -> 2 | Aplicar DFS no vértice 2 | {} | {} |
-| DFS(2) | Marca 2 como visitado, como não possui mais vizinhos não visitados, termina adicionando percorridos ao  CFC | {2} | {{2}} |
-| POP -> 1 | Aplicar DFS no vértice 1 | {2} | {{2}} |
-| DFS(1) | Marca 1 como visitado, avança para o 5 | {2, 1} | {{2}} |
-| -> DFS(5) | Marca 5 como visitado, avança para o 4  | {2, 1, 5} | {{2}} |
-| -> -> DFS(4) | Marca 4 como visitado, 1 e 2 já foram visitados, avança para o 3 | {2, 1, 5, 4} | {{2}} |
-| -> -> -> DFS(3) | Marca 3 como visitado, todos os vizinhos já estão visitados, voltando | {2, 1, 5, 4, 3 } | {{2}} |
-| 4 | Todos os vizinhos já estão visitados, voltando para 5 | {2, 1, 5, 4, 3} | {{2}} |
-| 5 | Todos os visinhos já estão visitados, voltando para 1 | {2, 1, 5, 4, 3} | {{2}} |
-| 1 | Todos os visinhos já estão visitados, terminando e formando CFC | {2, 1, 5, 4, 3} | {{2}, {1, 5, 4, 3}} |
+| --- | --- | --- | --- |
+| POP -> 1 | Aplicar DFS no vértice 1 | {} | {} |
+| DFS(1) | Marca 1 como visitado, avança para o 4 | {1} | {} |
+| -> DFS(4) | Marca 4 como visitado, avança para o 5 | {1, 4} | {} |
+| -> -> DFS(5) | Marca 5 como visitado; 1 já visitado, não tem mais vizinhos, termina | {1, 4, 5} | {} |
+| Volta para 4 | não tem mais vizinhos não visitados, termina | {1, 4, 5} | {} |
+| Volta para 1 | avança para o vizinho 3 | {1, 4, 5} | {} |
+| -> DFS(3) | Marca 3 como visitado; 4 já visitado, não tem mais vizinhos, termina | {1, 4, 5, 3} | {} |
+| Volta para 1 | não tem mais vizinhos não visitados, termina e forma CFC | {1, 4, 5, 3} | {{1, 4, 5, 3}} |
+| POP -> 5 | já visitado, ignora | {1, 4, 5, 3} | {{1, 4, 5, 3}} |
+| POP -> 4 | já visitado, ignora | {1, 4, 5, 3} | {{1, 4, 5, 3}} |
+| POP -> 3 | já visitado, ignora | {1, 4, 5, 3} | {{1, 4, 5, 3}} |
+| POP -> 2 | Aplicar DFS no vértice 2 | {1, 4, 5, 3} | {{1, 4, 5, 3}} |
+| DFS(2) | Marca 2 como visitado; 4 já visitado, não tem mais vizinhos, termina e forma CFC | {1, 4, 5, 3, 2} | {{1, 4, 5, 3}, {2}} |
 
-Com base nos valores de CFC encontrados, pode ser percorrida cada componente encontrado para se determinar o custo mínimo e a quantidade de possibilidades que existem.
+### Resultado final das CFCs
+
+$CFC_1$ = {1, 3, 4, 5}
+
+$CFC_2$ = {2}
+
+O resultado coincide com o obtido anteriormente, validando que a ordem de aplicação (primeiro DFS em G^R, segundo DFS em G) produz as mesmas componentes.
+
+Com as CFCs identificadas, cada uma é percorrida para determinar o custo mínimo e a quantidade de vértices que possuem esse custo:
+
+- CFC 1 {1, 3, 4, 5}: custos [2, 0, 6, 0] -> mínimo = 0, ocorrências = 2 (vértices 3 e 5).
+- CFC 2 {2}: custos {8} -> mínimo = 8, ocorrências = 1.
+
+Soma dos custos mínimos: 0 + 8 = 8.
+
+Quantidade de maneiras: 2 x 1 = 2 (aplicando módulo 10^9 + 7, o resultado permanece 2).
 
 ## Estimativa de complexidade
 
-Sejam `V` o número de vértices e `E` o número de arestas.
+### Complexidade de tempo
 
-- **Tempo: `O(V + E)`.**
+A construção do grafo e sua inversão percorrem os vértices e as arestas, levando `O(V + E)`. Cada uma das duas buscas em profundidade também visita cada vértice e examina cada aresta no máximo uma vez, portanto custa `O(V + E)`. Por fim, a identificação do menor custo e a contagem de ocorrências por componente são feitas em uma ou mais varreduras dos vértices, em `O(V)`. Logo: `O(V + E)`.
 
-- **Memória total: `O(V + E)`.**
+### Complexidade de espaço
 
-Esta é uma análise da estratégia. A adaptação efetiva das referências e a validação por execução serão registradas no marco 4.
+As listas de adjacência do grafo original e do grafo invertido ocupam `O(V + E)`. Os vetores de visitados, identificadores das componentes, custos mínimos e quantidades de ocorrências, além das estruturas de ordem de processamento e das pilhas da DFS, ocupam `O(V)`. Logo: `O(V + E)`.
