@@ -157,10 +157,23 @@ class KosarajuSCC:
         return self.id[v] == self.id[w]
 
 
-def data_input():
-    data = list(map(lambda x: int(x), sys.stdin.read().split()))
-    return data
 
+# Data input - sys filepath safety
+def get_filepath() -> str:
+    if len(sys.argv) != 2:
+        raise FileNotFoundError(
+            "The execution of the program requires input of the filepath with the input data"
+        )
+    return sys.argv[1]
+
+
+# Data input - read
+def data_input() -> list[int]:
+    filepath = get_filepath()
+    raw_data = None
+    with open(filepath, "r") as arquivo:
+        raw_data = list(map(lambda x: int(x), arquivo.read().split()))
+    return raw_data
 
 
 def data_parsing(raw_data: list[int]) -> dict:
@@ -197,11 +210,15 @@ def main():
     
     #Get components
     m = scc.count
+    print(m, "strong components")
     components = []
     for i in range(m):
         components.append([])
     for v in range(digraph.V):
         components[scc.id[v]].append(v)
+
+    # Debug for Vitor and Renato
+    # print(components)
     
     # Get mapped costs:
     costs = []
@@ -211,6 +228,10 @@ def main():
         for v in comp:
             costs[i].append(parsed_data["costs"][v])
         i += 1
+  
+    # Debug for Vitor and Renato
+    # print(costs)
+    # print(parsed_data["costs"])
     
     # Get min costs and repetitions
     min_cost = []
@@ -223,6 +244,10 @@ def main():
             if cost == min_cost[i]: rep += 1
         min_rep.append(rep)
         i += 1
+    
+    # Debug for Vitor and Renato
+    # print(min_cost)
+    # print(min_rep)
         
     # Make the answer
     answer_min_cost = sum(min_cost)
@@ -234,6 +259,3 @@ def main():
 # Run
 if __name__ == "__main__":
     main()
-
-
-# Test: #71, time: 1937 ms., memory: 155728 KB, exit code: 1, checker exit code: 0, verdict: RUNTIME_ERROR
