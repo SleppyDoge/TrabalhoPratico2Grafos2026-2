@@ -31,6 +31,7 @@ Nessa seção, será realizada a construção simultânea da Representação Gr�
 Na entrada da instânica, nota-se 5 vértices, sendo caracterizados pelos valores de 1 até 5. Então, para a representação gráfica inicial temos:
 
 ```mermaid
+%%{init: {"flowchart": {"minNodeWidth": 0}}}%%
 flowchart LR 
   A((1))
   B((2))
@@ -58,6 +59,7 @@ custos = [2, 8, 0, 6, 0]
 ```
 
 ```mermaid
+%%{init: {"flowchart": {"minNodeWidth": 0}}}%%
 flowchart LR 
   A(("1(2)"))
   B(("2(8)"))
@@ -73,6 +75,7 @@ Para a ligação entre vértices 1 e 4, assumindo um grafo não-direcionado, tem
 **Representação Gráfica:** Ligando os vértices 1 e 4.
 
 ```mermaid
+%%{init: {"flowchart": {"minNodeWidth": 0}}}%%
 flowchart LR 
   A(("1(2)"))
   B(("2(8)"))
@@ -100,6 +103,7 @@ Para a ligação entre vértices 1 e 3, assumindo um grafo não-direcionado, tem
 **Representação Gráfica:** Ligando os vértices 1 e 3.
 
 ```mermaid
+%%{init: {"flowchart": {"minNodeWidth": 0}}}%%
 flowchart LR 
   A(("1(2)"))
   B(("2(8)"))
@@ -128,6 +132,7 @@ Para a ligação entre vértices 2 e 4, assumindo um grafo não-direcionado, tem
 **Representação Gráfica:** Ligando os vértices 2 e 4.
 
 ```mermaid
+%%{init: {"flowchart": {"minNodeWidth": 0}}}%%
 flowchart LR 
   A(("1(2)"))
   B(("2(8)"))
@@ -157,6 +162,7 @@ Para a ligação entre vértices 3 e 4, assumindo um grafo não-direcionado, tem
 **Representação Gráfica:** Ligando os vértices 3 e 4.
 
 ```mermaid
+%%{init: {"flowchart": {"minNodeWidth": 0}}}%%
 flowchart LR 
   A(("1(2)"))
   B(("2(8)"))
@@ -187,6 +193,7 @@ Para a ligação entre vértices 4 e 5, assumindo um grafo não-direcionado, tem
 **Representação Gráfica:** Ligando os vértices 4 e 5.
 
 ```mermaid
+%%{init: {"flowchart": {"minNodeWidth": 0}}}%%
 flowchart LR 
   A(("1(2)"))
   B(("2(8)"))
@@ -218,6 +225,7 @@ Para a ligação entre vértices 5 e 1, assumindo um grafo não-direcionado, tem
 **Representação Gráfica:** Ligando os vértices 5 e 1.
 
 ```mermaid
+%%{init: {"flowchart": {"minNodeWidth": 0}}}%%
 flowchart LR 
   A(("1(2)"))
   B(("2(8)"))
@@ -250,6 +258,7 @@ Com isso, temos a representação final do **grafo** e da **lista de adjacência
 **Grafo**:
 
 ```mermaid
+%%{init: {"flowchart": {"minNodeWidth": 0}}}%%
 flowchart LR 
   A(("1(2)"))
   B(("2(8)"))
@@ -320,6 +329,7 @@ Usando a lista de adjacência final (Passo 8):
 Todos os 5 vértices foram alcançados por essa única chamada de DFS(1), então todos recebem `componente = 1`. O laço externo verifica os vértices restantes (2, 3, 4, 5) e encontra todos já visitados — nenhuma nova DFS é disparada.
  
 ```mermaid
+%%{init: {"flowchart": {"minNodeWidth": 0}}}%%
 flowchart LR 
   A(("1(2)"))
   B(("2(8)"))

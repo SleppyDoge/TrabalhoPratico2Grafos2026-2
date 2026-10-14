@@ -73,6 +73,7 @@ que, pela construção do marco anterior, mas com as direções das arestas, res
 **Grafo**:
 
 ```mermaid
+%%{init: {"flowchart": {"minNodeWidth": 0}}}%%
 flowchart LR 
   A(("1(2)"))
   B(("2(8)"))
@@ -105,6 +106,7 @@ Seguindo a implementação de referência ``kosaraju_scc.py`` do ``algs4-py``, o
 **Grafo invertido:**
 
 ```mermaid
+%%{init: {"flowchart": {"minNodeWidth": 0}}}%%
 flowchart LR 
   A(("1(2)"))
   B(("2(8)"))
